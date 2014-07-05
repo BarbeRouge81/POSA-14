@@ -29,7 +29,7 @@ public class DownloadUtilsTests
     public DownloadUtilsTests () {
         super (DownloadActivity.class);
     }
-	
+
     // The intent returned by makeMessengerIntent()
     Intent mIntent;
     
@@ -52,7 +52,7 @@ public class DownloadUtilsTests
      * IntentService.
      */
     static MessageHandler mHandler;
-	
+
     /**
      * @class MessageHandler
      *
@@ -71,16 +71,16 @@ public class DownloadUtilsTests
          * received Uri and notify the JUnit thread.
          */
         public void handleMessage(Message msg) {
-			
+
             // We don't know what tag they'll use for the path, so we
             // have to search for it.
         	mReceivedUri = Utilities.searchForPath(msg);
-			
+
             // Let the unit test thread know we've gotten a message.
             mLatch.countDown();
         }
     }
-	
+
     /**
      * This method is called before each test is run to perform
      * initialization activities.
@@ -88,17 +88,15 @@ public class DownloadUtilsTests
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-		
+
         // Make an arbitrary Messenger intent.
         mIntent = DownloadUtils.makeMessengerIntent(getActivity(), 
                                                     DownloadUtilsTests.class, 
                                                     new MessageHandler(Looper.myLooper()), 
                                                     Options.TEST_URI);
         mExtras = mIntent.getExtras();
-		
-		
     }
-	
+
     /**
      * Try downloading a file.
      */
@@ -106,37 +104,37 @@ public class DownloadUtilsTests
         Context context = getInstrumentation().getContext();
         String result = DownloadUtils.downloadFile(getActivity(), 
                                                    Uri.parse(Options.TEST_URI));
-	
+
         assertTrue(Utilities.checkDownloadedImage(context, result));
     }
-	
+
     /**
      * Check that the intent has a Messenger attached.
      */
     public void test_makeMessengerIntent_Messenger_Extra () {
         assertTrue(Utilities.checkMessenger(mIntent));
     }
-	
+
     /**
      * Check that the intent has the proper Uri attached
      */
     public void test_makeMessengerIntent_Uri_Extra () {
         assertTrue(Utilities.checkUri(mIntent));		
     }
-	
+
     /**
      * Check that the intent will start the class we told it to
      */
     public void test_makeMessengerIntent_Class () {
         assertTrue(Utilities.checkClass(mIntent, DownloadUtilsTests.class));
     }
-	
+
     /**
      * Try sending a message using sendPath().
      */
     public void test_sendPath () throws Exception {
         mLatch = new CountDownLatch(1);
-		
+
         // Start a thread to catch the message from sendPath()
         new Thread ( new Runnable () {
                 public void run() {
@@ -145,22 +143,22 @@ public class DownloadUtilsTests
                     Looper.loop();
                 }
             }).start();
-		
+
         // Wait for the handler to instantiate
         Thread.sleep(Options.SHORT_WAIT_TIME);
-		
+
         // Send a message to ourselves
         DownloadUtils.sendPath(Options.TEST_URI, new Messenger(mHandler));
-		
+
         // Wait for it to get here
         mLatch.await(Options.LONG_WAIT_TIME, TimeUnit.MILLISECONDS);
-		
+
         // See if we got the message or timed out.
         assertNotNull(mReceivedUri);
-		
+
         // Check that the Uri is correct
         assertTrue(mReceivedUri.equals(Options.TEST_URI));
-		
+
         // Other tests use this
         mReceivedUri = null;
     }
@@ -171,7 +169,7 @@ public class DownloadUtilsTests
      */
     public void test_downloadAndRespond() throws Exception {
         mLatch = new CountDownLatch(1);
-		
+
         // Start a thread to handle messages we send to ourselves
         new Thread ( new Runnable () {
                 public void run() {
@@ -180,24 +178,24 @@ public class DownloadUtilsTests
                     Looper.loop();
                 }
             }).start();
-		
+
         // Wait for mHandler to instantiate
         Thread.sleep(Options.SHORT_WAIT_TIME);
-		
+
         // Download the image and send a message to ourselves
         DownloadUtils.downloadAndRespond(getActivity(), 
                                          Uri.parse(Options.TEST_URI), 
                                          new Messenger(mHandler));
-		
+
         // Wait for it to get here.
         mLatch.await(Options.LONG_WAIT_TIME, TimeUnit.MILLISECONDS);
-		
+
         // Check if we timed out or got the message
         assertNotNull(mReceivedUri);
-		
+
         // Make sure the image downloaded correctly.
         assertTrue(Utilities.checkDownloadedImage(getInstrumentation().getContext(), mReceivedUri));
-		
+
         // Other tests use this
         mReceivedUri = null;
     }

@@ -10,8 +10,9 @@ package edu.vuum.mocca.test;
  *
  */
 public class Options {
+
     /**
-     * The URL of the image we're using for testing.
+     * The online URL of the image we're using for testing.
      */
     static final String TEST_URI = "https://d396qusza40orc.cloudfront.net/posa/dougs-xsmall.jpg";
 
@@ -20,14 +21,14 @@ public class Options {
      * we can compare it to what's downloaded.
      */
     static final int TEST_IMAGE = R.drawable.dougs;
-	
+
     /**
      * Time we should wait for things to instantiate.
      */
-    static final long SHORT_WAIT_TIME = 1000;
-	
+    static final long SHORT_WAIT_TIME = 10000;
+
     /**
      * Time we should wait for things to download.
      */
-    static final long LONG_WAIT_TIME = 5000;
+    static final long LONG_WAIT_TIME = 25000;
 }

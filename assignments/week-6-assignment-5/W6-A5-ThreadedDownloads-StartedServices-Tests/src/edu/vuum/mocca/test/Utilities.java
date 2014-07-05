@@ -1,5 +1,10 @@
 package edu.vuum.mocca.test;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
+import edu.vuum.mocca.DownloadUtils;
 
 /**
  * @class Utilities
@@ -22,13 +28,13 @@ public class Utilities {
     static boolean checkUri(Intent intent) {
         return Options.TEST_URI.equals(intent.getData().toString());
     }
-	
+
     /**
      * Check that the provided Intent contains a Messenger extra.
      */
     static boolean checkMessenger(Intent intent) {
         Bundle extras = intent.getExtras();
-		
+
         // We don't know what tag they'll use for the Messenger, so we
         // have to search for it.
         Messenger messenger = null;
@@ -37,7 +43,7 @@ public class Utilities {
             if (extras.get(key) instanceof Messenger) 
                 messenger = (Messenger) extras.get(key);
         }
-		
+
         return (messenger != null);
     }
 
@@ -47,7 +53,7 @@ public class Utilities {
     static boolean checkClass(Intent intent, Class<?> class_) {
         return intent.getComponent().getClassName().equals(class_.getName());
     }
-	
+
     
     /**
      * Check if the downloaded Bitmap is equivalent to the expected
@@ -55,7 +61,7 @@ public class Utilities {
      */
     static boolean checkDownloadedImage(Context test_context, String result) {
         Bitmap downloaded = BitmapFactory.decodeFile(result);
-		
+
         Bitmap expected = BitmapFactory.decodeResource(test_context.getResources(),
                                                        Options.TEST_IMAGE);
         return downloaded.sameAs(expected);
@@ -76,4 +82,5 @@ public class Utilities {
         
         return path;
     }
+    
 }
