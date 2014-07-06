@@ -37,7 +37,7 @@ public class DownloadUtils {
      * The key used to store/retrieve a Messenger extra from a Bundle.
      */
 	public static final String MESSENGER_KEY = "MESSENGER";
-
+	
 	/**
      * The key used to store/retrieve a file's pathname from a Bundle.
      */
@@ -137,7 +137,7 @@ public class DownloadUtils {
      * project expects. (found in res/drawable-nodpi and Options.java)
      */
     static final int OFFLINE_TEST_IMAGE = R.raw.dougs;
-
+	
     /**
      * The file name that we should use to store the image in offline mode
      */
@@ -161,22 +161,22 @@ public class DownloadUtils {
             // If we're offline, write the image in our resources to
             // disk, then return that pathname.
             if (DOWNLOAD_OFFLINE) {
-
+	        	
                 // Store the image on the file system. We can store it
                 // as private since the test project runs in the same
                 // process as the target project
                 FileOutputStream out =
                     context.openFileOutput(OFFLINE_FILENAME, 0);
-
+	        	
                 // Get a stream from the image resource
                 InputStream in =
                     context.getResources().openRawResource(OFFLINE_TEST_IMAGE);
-
+	        	
                 // Write the resource to disk.
                 copy(in, out);
                 in.close();
                 out.close();
-
+	        	
                 return context.getFilesDir().toString() + File.separator + OFFLINE_FILENAME;
             }
     	
@@ -186,20 +186,20 @@ public class DownloadUtils {
                 final File file = getTemporaryFile(context,
                                                    uri.toString());
                 Log.d(TAG, "    downloading to " + file);
-
+	
                 // Download the contents at the URL, which should
                 // reference an image.
                 final InputStream in = (InputStream)
                     new URL(uri.toString()).getContent();
                 final OutputStream os =
                     new FileOutputStream(file);
-
+	
                 // Copy the contents of the downloaded image to the
                 // temp file.
                 copy(in, os);
                 in.close();
                 os.close();
-
+	
                 // Return the pathname of the temp file.
                 return file.getAbsolutePath();
             }
